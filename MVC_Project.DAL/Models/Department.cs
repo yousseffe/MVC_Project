@@ -10,10 +10,11 @@ namespace MVC_3.DAL.Models
 	public class Department
 	{
 		public int Id { get; set; }
-		public string Name { get; set; }
-
 		[Required(ErrorMessage = "Code is required!")]
 		public string Code { get; set; }
+        [Required(ErrorMessage = "Name is required!")]
+        public string Name { get; set; }
+		[Display(Name = "Date Of Creation")]
         public DateTime DateOfCreation { get; set; }
 
     }

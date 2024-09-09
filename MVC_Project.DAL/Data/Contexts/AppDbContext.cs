@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVC_3.DAL.Models;
+using MVC_Project.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace MVC_3.DAL.Data.Contexts
 		}
 
 		public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
-	}
+
+    }
 }

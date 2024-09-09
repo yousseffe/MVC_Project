@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MVC_3.DAL.Data.Contexts;
 using MVC_Project.BLL.Interface;
+using MVC_Project.BLL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,16 +28,20 @@ namespace MVC_Project
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            //services.AddScoped<AppDbContext>();
-            services.AddDbContext<AppDbContext>(option =>
-            {
-                option.UseSqlServer(Configuration.GetConnectionString("DefualtConnection"));
+            // Registering the interface with its concrete implementation
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
+            // Registering the controllers and views
+            services.AddControllersWithViews();
+
+            // Registering the database context with SQL Server
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddScoped<IDepartmentRepository , IDepartmentRepository> ();
         }
-        
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
