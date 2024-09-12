@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVC_Project.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace MVC_3.DAL.Models
 {
-	public class Department
+	public class Department : ModelBase
 	{
-		public int Id { get; set; }
 		[Required(ErrorMessage = "Code is required!")]
 		public string Code { get; set; }
         [Required(ErrorMessage = "Name is required!")]

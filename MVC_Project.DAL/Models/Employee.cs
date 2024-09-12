@@ -20,16 +20,16 @@ namespace MVC_Project.DAL.Models
         FullTime = 1,
         PartTime = 2
     }
-    public class Employee
+    public class Employee : ModelBase
     {
-        public int Id { get; set; }
         [Required(ErrorMessage = "Name is required!")]
         [MaxLength(50 , ErrorMessage ="Max Length for name is 50")]
         [MinLength(4 , ErrorMessage ="Min Length For name is 4")]
         public string Name { get; set; }
         [Range(21, 60)]
         public int? Age { get; set; }
-        [RegularExpression(@"^[0-9]{1,3}-[a-zA-Z]{5,10}-[a-zA-Z]{5,10}",ErrorMessage ="Address Must be like 123-street-city-country")]
+
+        [RegularExpression(@"^[0-9]{1,3}-[a-zA-Z]{3,20}-[a-zA-Z]{3,20}-[a-zA-Z]{3,20}$", ErrorMessage = "Address must be in the format 123-street-city-country.")]
         public string Address { get; set; }
         [DataType(DataType.Currency)]
         public decimal Salary { get; set; }

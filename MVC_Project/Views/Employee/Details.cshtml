@@ -1,0 +1,17 @@
+﻿@using MVC_Project.DAL.Models
+@model Employee
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h1>Employee Details</h1>
+
+<br />
+<br />
+<div>
+    <partial name="PartialViews/DetailsDelete"></partial>
+
+
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary mt-5">Edit</a>
+    <a asp-action="Index" class="btn btn-light">Back To List</a>
+</div>

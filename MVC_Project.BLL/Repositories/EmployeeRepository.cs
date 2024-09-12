@@ -11,39 +11,16 @@ using System.Threading.Tasks;
 
 namespace MVC_Project.BLL.Repositories
 {
-    internal class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository :  GenericRepository<Employee> , IEmployeeRepository
     {
-        private readonly AppDbContext _DbContext;
-        public EmployeeRepository(AppDbContext appDbContext)
+        public EmployeeRepository(AppDbContext dbContext) : base(dbContext) { }
+
+
+        public IQueryable<Employee> GetEmployeesByAddress(string address)
         {
-            _DbContext = appDbContext;
-        }
-        public int Add(Employee employee)
-        {
-            _DbContext.Employees.Add(employee);
-            return _DbContext.SaveChanges();
+            return _DbContext.Employees.Where(e => e.Address.ToLower().Contains(address.ToLower()));
         }
 
-        public int Delete(Employee employee)
-        {
-            _DbContext.Employees.Remove(employee);
-            return _DbContext.SaveChanges();
-        }
 
-        public IEnumerable<Employee> GetAll()
-        {
-            return _DbContext.Employees.AsNoTracking().ToList();
-        }
-
-        public Employee GetByID(int id)
-        {
-            return _DbContext.Employees.Find(id);
-        }
-
-        public int Update(Employee employee)
-        {
-            _DbContext.Employees.Update(employee);
-            return _DbContext.SaveChanges();
-        }
     }
 }

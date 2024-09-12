@@ -10,39 +10,10 @@ using System.Threading.Tasks;
 
 namespace MVC_Project.BLL.Repositories
 {
-    public class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : GenericRepository<Department> , IDepartmentRepository
     {
         private readonly AppDbContext _DbContext;
-        public DepartmentRepository(AppDbContext appDbContext) 
-        {
-            _DbContext = appDbContext;
-        }
-        public int Add(Department department)
-        {
-            _DbContext.Departments.Add(department);
-            return _DbContext.SaveChanges();
-        }
+        public DepartmentRepository(AppDbContext DbContext) : base(DbContext) {}
 
-        public int Delete(Department department)
-        {
-            _DbContext.Departments.Remove(department);
-            return _DbContext.SaveChanges();
-        }
-
-        public IEnumerable<Department> GetAll()
-        {
-            return _DbContext.Departments.AsNoTracking().ToList();
-        }
-
-        public Department GetByID(int id)
-        {
-            return _DbContext.Departments.Find(id);
-        }
-
-        public int Update(Department department)
-        {
-            _DbContext.Departments.Update(department);
-            return _DbContext.SaveChanges();
-        }
     }
 }
