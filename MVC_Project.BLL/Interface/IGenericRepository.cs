@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace MVC_Project.BLL.Interface
 {
-    public interface IEmployeeRepository : IGenericRepository<Employee>
+    public interface IGenericRepository<T> where T : ModelBase
     {
-        IQueryable<Employee> GetEmployeesByAddress(string address);
+        IEnumerable<T> GetAll();
+        T GetByID(int id);
+        int Add(T item);
+        int Update(T item);
+        int Delete(T item);
     }
 }

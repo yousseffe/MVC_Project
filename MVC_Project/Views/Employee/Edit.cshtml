@@ -1,0 +1,19 @@
+﻿@using MVC_Project.DAL.Models
+@model Employee
+@{
+    ViewData["Title"] = "Edit Employee";
+}
+
+<h1>Edit Employee</h1>
+
+<br />
+<br />
+<div asp-validation-summary="ModelOnly"></div>
+<form asp-action="Edit">
+    <partial name="PartialViews/CreateEdit"></partial>
+    <input type="submit" value="Save Changes" class="btn btn-primary mt-5" />
+    <a asp-action="Index" class="btn btn-light">Back to list</a>
+</form>
+@section validateSection {
+    <partial name="_validationscriptspartial"></partial>
+}

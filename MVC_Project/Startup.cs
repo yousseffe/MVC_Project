@@ -30,6 +30,8 @@ namespace MVC_Project
         {
             // Registering the interface with its concrete implementation
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
 
             // Registering the controllers and views
             services.AddControllersWithViews();
