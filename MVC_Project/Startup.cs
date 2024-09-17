@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.Options;
 using MVC_3.DAL.Data.Contexts;
 using MVC_Project.BLL.Interface;
 using MVC_Project.BLL.Repositories;
+using MVC_Project.Extensions;
+using MVC_Project.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,22 +28,19 @@ namespace MVC_Project
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Registering the interface with its concrete implementation
-            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+           
 
 
-            // Registering the controllers and views
             services.AddControllersWithViews();
 
-            // Registering the database context with SQL Server
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddApplicationServices();
+            services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
         }
 
 
