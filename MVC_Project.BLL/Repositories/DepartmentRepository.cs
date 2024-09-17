@@ -12,7 +12,6 @@ namespace MVC_Project.BLL.Repositories
 {
     public class DepartmentRepository : GenericRepository<Department> , IDepartmentRepository
     {
-        private readonly AppDbContext _DbContext;
         public DepartmentRepository(AppDbContext DbContext) : base(DbContext) {}
 
     }

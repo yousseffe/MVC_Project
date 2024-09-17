@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using MVC_3.DAL.Models;
 using MVC_Project.BLL.Interface;
 using MVC_Project.DAL.Models;
+using MVC_Project.ViewModels;
 using System;
+using System.Collections.Generic;
 
 namespace MVC_Project.Controllers
 {
@@ -12,17 +15,28 @@ namespace MVC_Project.Controllers
     {
         private readonly IEmployeeRepository _repository;
         private readonly IWebHostEnvironment _env;
-        public EmployeeController(IEmployeeRepository repository, IWebHostEnvironment env)
+        private readonly IMapper _mapper;
+        public EmployeeController(IEmployeeRepository employeeRepository, IWebHostEnvironment env ,IMapper mapper)
         {
-            _repository = repository;
+            _repository = employeeRepository;
             _env = env;
+            _mapper = mapper;
         }
-        public IActionResult Index()
+        public IActionResult Index(string SearchInput)
         {
-            var employees = _repository.GetAll();
-            ViewData["Message"] = "Hello ViewData";
-            ViewBag.Message = "Hello View Bag";
-            return View(employees);
+            ViewBag.Message = "All Employees";
+            if (string.IsNullOrWhiteSpace(SearchInput))
+            {
+                var employees = _repository.GetAll();
+                var mappedEmp = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+                return View(mappedEmp);
+            }
+            else
+            {
+                var employees = _repository.GetEmployeesByName(SearchInput);
+                var mappedEmp = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+                return View(mappedEmp);
+            }
         }
 
         [HttpGet]
@@ -33,11 +47,12 @@ namespace MVC_Project.Controllers
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(EmployeeViewModel employee)
         {
             if (ModelState.IsValid)
             {
-                var count = _repository.Add(employee);
+                var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employee);
+                var count = _repository.Add(mappedEmp);
                 if (count > 0)
                 {
                     TempData["Message"] = "Employee created successfully";
@@ -56,7 +71,7 @@ namespace MVC_Project.Controllers
         {
             if (id == null || !id.HasValue)
             {
-                return View("Error");
+                return BadRequest();
             }
             var employee = _repository.GetByID(id.Value);
             return View(viewName, employee);
@@ -65,22 +80,11 @@ namespace MVC_Project.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Edit(int? id)
         {
-            if (!id.HasValue)
-            {
-                return BadRequest();
-            }
-            var employee = _repository.GetByID(id.Value);
-
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            return View(employee);
+            return Details(id , "Edit");
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult Edit([FromRoute] int id, Employee employee)
+        public IActionResult Edit([FromRoute] int id, EmployeeViewModel employee)
         {
             if (id != employee.Id)
                 return BadRequest();
@@ -92,7 +96,8 @@ namespace MVC_Project.Controllers
 
             try
             {
-                _repository.Update(employee);
+                var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employee);
+                var count = _repository.Update(mappedEmp);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -113,11 +118,12 @@ namespace MVC_Project.Controllers
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult Delete(Employee employee)
+        public IActionResult Delete(EmployeeViewModel employee)
         {
             try
             {
-                _repository.Delete(employee);
+                var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employee);
+                _repository.Delete(mappedEmp);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

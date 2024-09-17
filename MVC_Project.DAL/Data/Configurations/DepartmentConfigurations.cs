@@ -15,6 +15,9 @@ namespace MVC_3.DAL.Data.Configurations
 		{
 			// Fluent Apis
 			builder.Property(D => D.Id).UseIdentityColumn(10 , 10);
+			builder.HasMany(x => x.Employees)
+				   .WithOne(E=>E.Department)
+				   .OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

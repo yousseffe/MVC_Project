@@ -21,6 +21,9 @@ namespace MVC_Project.BLL.Repositories
             return _DbContext.Employees.Where(e => e.Address.ToLower().Contains(address.ToLower()));
         }
 
-
+        public IQueryable<Employee> GetEmployeesByName(string name)
+        {
+            return _DbContext.Employees.Where(E => E.Name.ToLower().Contains(name.ToLower()));
+        }
     }
 }
