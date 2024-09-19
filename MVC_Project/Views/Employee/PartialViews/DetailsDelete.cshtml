@@ -1,6 +1,8 @@
 ﻿@using MVC_Project.ViewModels
 @model EmployeeViewModel
-
+<div>
+	<img src="~/Files/Images/@Model.ImageName" alt="Employeee Image" />
+</div>
 <div>
 	<label class="col-form-label" asp-for="Name">Name: </label>
 	<input asp-for="Name" class="form-control" readonly />
